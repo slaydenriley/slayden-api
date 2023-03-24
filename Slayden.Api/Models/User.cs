@@ -27,4 +27,6 @@ public class User
     
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; }
+    
+    public virtual ICollection<Post>? Posts { get; set; }
 }

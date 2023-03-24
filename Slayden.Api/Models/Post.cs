@@ -16,9 +16,6 @@ public class Post
     [Column("content")]
     public string Content { get; set; }
 
-    [Column("user_id")]
-    public int UserId { get; set; }
-    
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }
     
@@ -28,5 +25,6 @@ public class Post
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; }
     
-    public User User { get; set; }
+    [ForeignKey("user_id")]
+    public User? User { get; set; }
 }

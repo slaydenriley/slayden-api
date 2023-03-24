@@ -26,7 +26,5 @@ public class User
     public DateTime UpdatedAt { get; set; }
     
     [Column("deleted_at")]
-    public DateTime DeletedAt { get; set; }
-    
-    public ICollection<Post> Posts { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Slayden.Api.Data;
 using Slayden.Api.Models;
@@ -17,10 +16,23 @@ namespace Slayden.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult GetAll()
         {
-            var posts = _context.Post.ToList();
+            var posts = _context.Posts.ToList();
             return Ok(posts);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] Post post)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Posts.Add(post);
+                _context.SaveChanges();
+                return CreatedAtAction(nameof(GetAll), new { id = post.Id }, post);
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }

@@ -26,7 +26,7 @@ public class Post
     public DateTime UpdatedAt { get; set; }
     
     [Column("deleted_at")]
-    public DateTime DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
     
     public User User { get; set; }
 }

@@ -6,7 +6,7 @@ namespace Slayden.Api.Data
     public class SlaydenDbContext : DbContext
     {
         public DbSet<User> User { get; set; }
-        public DbSet<Post> Post { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         public SlaydenDbContext(DbContextOptions<SlaydenDbContext> options)
             : base(options)
@@ -20,7 +20,7 @@ namespace Slayden.Api.Data
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)
-                .WithMany(u => u.Posts)
+                .WithMany()
                 .HasForeignKey(p => p.UserId);
         }
     }

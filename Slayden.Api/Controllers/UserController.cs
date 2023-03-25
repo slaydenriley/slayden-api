@@ -71,7 +71,7 @@ namespace Slayden.Api.Controllers
         public async Task<ActionResult<User>> GetUserPosts(int id)
         {
             var user = await _context.Users
-                .Include(u => u.Posts) // include posts
+                .Include(u => u.Posts)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
@@ -95,6 +95,15 @@ namespace Slayden.Api.Controllers
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
+                    Comments = p.Comments?.Select(c => new GetCommentResponse
+                    {
+                        Id = c.Id,
+                        Guid = c.Guid,
+                        CommentorName = c.CommentorName,
+                        CommentorEmail = c.CommentorEmail,
+                        Content = c.Content,
+                        CreatedAt = c.CreatedAt
+                    }).ToList()
                 }).ToList()
             };
 

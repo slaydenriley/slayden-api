@@ -27,4 +27,6 @@ public class Post
     
     [ForeignKey("user_id")]
     public User? User { get; set; }
+    
+    public virtual ICollection<Comment>? Comments { get; set; }
 }

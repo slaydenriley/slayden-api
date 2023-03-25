@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Slayden.Api.Data;
@@ -11,9 +12,11 @@ using Slayden.Api.Data;
 namespace Slayden.Api.Migrations
 {
     [DbContext(typeof(SlaydenDbContext))]
-    partial class SlaydenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230325202953_AddCommentBelongsToPost")]
+    partial class AddCommentBelongsToPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

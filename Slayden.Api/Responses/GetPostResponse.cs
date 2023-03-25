@@ -9,4 +9,5 @@ public class GetPostResponse
     public string AuthorName { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public List<GetCommentResponse>? Comments { get; set; }
 }

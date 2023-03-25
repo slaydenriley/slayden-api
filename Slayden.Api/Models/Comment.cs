@@ -27,4 +27,7 @@ public class Comment
 
     [Column("is_approved")]
     public bool IsApproved { get; set; }
+    
+    [ForeignKey("post_id")]
+    public Post? Post { get; set; }
 }

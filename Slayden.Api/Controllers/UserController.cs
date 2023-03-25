@@ -7,7 +7,7 @@ using Slayden.Api.Responses;
 namespace Slayden.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class UsersController : ControllerBase
     {
         private readonly SlaydenDbContext _context;
@@ -18,39 +18,107 @@ namespace Slayden.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("users")]
+        public IActionResult GetUsers()
         {
-            var users = _context.Users.Include(u => u.Posts).ToList();
-            var response = users.Select(u => new GetUserResponse
+            var users = _context.Users.ToList();
+            try
             {
-                Id = u.Id,
-                Guid = u.Guid,
-                Name = u.Name,
-                Email = u.Email,
-                CreatedAt = u.CreatedAt,
-                UpdatedAt = u.UpdatedAt,
-                Posts = u.Posts.Select(p => new GetPostResponse
+                var response = users.Select(u => new GetUserResponse
+                {
+                    Id = u.Id,
+                    Guid = u.Guid,
+                    Name = u.Name,
+                    Email = u.Email,
+                    CreatedAt = u.CreatedAt,
+                    UpdatedAt = u.UpdatedAt,
+                });
+                
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"Something went wrong: {e}");
+            }
+        }
+        
+        [HttpGet]
+        [Route("users/{id}")]
+        public async Task<ActionResult<User>> GetUserById(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var response = new GetUserResponse
+            {
+                Id = user.Id,
+                Guid = user.Guid,
+                Name = user.Name,
+                Email = user.Email,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+            };
+
+            return Ok(response);
+        }
+        
+        [HttpGet]
+        [Route("users/{id}/posts")]
+        public async Task<ActionResult<User>> GetUserPosts(int id)
+        {
+            var user = await _context.Users
+                .Include(u => u.Posts)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var response = new GetUserResponse
+            {
+                Id = user.Id,
+                Guid = user.Guid,
+                Name = user.Name,
+                Email = user.Email,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                Posts = user.Posts?.Select(p => new GetPostResponse
                 {
                     Id = p.Id,
-                    Guid = p.Guid,
                     Title = p.Title,
+                    AuthorName = p.User.Name,
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
+                    UpdatedAt = p.UpdatedAt,
+                    Comments = p.Comments?.Select(c => new GetCommentResponse
+                    {
+                        Id = c.Id,
+                        Guid = c.Guid,
+                        CommentorName = c.CommentorName,
+                        CommentorEmail = c.CommentorEmail,
+                        Content = c.Content,
+                        CreatedAt = c.CreatedAt
+                    }).ToList()
                 }).ToList()
-            });
+            };
 
             return Ok(response);
         }
 
         [HttpPost]
+        [Route("users")]
         public IActionResult Create([FromBody] User user)
         {
             if (ModelState.IsValid)
             {
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                return CreatedAtAction(nameof(GetAll), new { id = user.Id }, user);
+                return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
             }
 
             return BadRequest(ModelState);

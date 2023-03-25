@@ -7,7 +7,7 @@ namespace Slayden.Api.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-
+        public DbSet<Comment> Comments { get; set; }
         public SlaydenDbContext(DbContextOptions<SlaydenDbContext> options)
             : base(options)
         {
@@ -17,6 +17,7 @@ namespace Slayden.Api.Data
         {
             modelBuilder.Entity<User>().ToTable("user");
             modelBuilder.Entity<Post>().ToTable("post");
+            modelBuilder.Entity<Comment>().ToTable("comment");
         }
     }
 }

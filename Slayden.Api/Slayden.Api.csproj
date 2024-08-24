@@ -22,9 +22,4 @@
       <ProjectReference Include="..\Slayden.Core\Slayden.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers" />
-      <Folder Include="Requests" />
-    </ItemGroup>
-
 </Project>

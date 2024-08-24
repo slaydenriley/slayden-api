@@ -1,3 +1,5 @@
 .env
 appsettings.User.json
 .idea
+**/bin
+**/.git

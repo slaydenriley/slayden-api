@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "DeY2myXpNgM=",
+  "dgSpecHash": "2bCOI/DKdv0=",
   "success": true,
   "projectFilePath": "/Users/riley/projects/slayden-api/Slayden.Core/Slayden.Core.csproj",
   "expectedPackageFiles": [
+    "/Users/riley/.nuget/packages/erroror/2.0.1/erroror.2.0.1.nupkg.sha512",
     "/Users/riley/.nuget/packages/microsoft.netcore.app.ref/7.0.20/microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
     "/Users/riley/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.20/microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512"
   ],

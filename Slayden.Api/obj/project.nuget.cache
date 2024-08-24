@@ -1,16 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "+6Mxg1jo0vY=",
+  "dgSpecHash": "abggXLwI82c=",
   "success": true,
   "projectFilePath": "/Users/riley/projects/slayden-api/Slayden.Api/Slayden.Api.csproj",
   "expectedPackageFiles": [
+    "/Users/riley/.nuget/packages/erroror/2.0.1/erroror.2.0.1.nupkg.sha512",
     "/Users/riley/.nuget/packages/microsoft.aspnetcore.openapi/8.0.8/microsoft.aspnetcore.openapi.8.0.8.nupkg.sha512",
     "/Users/riley/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
-    "/Users/riley/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
-    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore/6.4.0/swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
-    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swagger/6.4.0/swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
-    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.4.0/swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
-    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.4.0/swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+    "/Users/riley/.nuget/packages/microsoft.openapi/1.6.14/microsoft.openapi.1.6.14.nupkg.sha512",
+    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore/6.7.1/swashbuckle.aspnetcore.6.7.1.nupkg.sha512",
+    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swagger/6.7.1/swashbuckle.aspnetcore.swagger.6.7.1.nupkg.sha512",
+    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.7.1/swashbuckle.aspnetcore.swaggergen.6.7.1.nupkg.sha512",
+    "/Users/riley/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.7.1/swashbuckle.aspnetcore.swaggerui.6.7.1.nupkg.sha512"
   ],
   "logs": []
 }

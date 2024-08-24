@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Slayden.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5d9604ecea6d6b27d4854ea8fac96e11b9323782")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c57e1b6f92cbed1454703a59e186fd571688e8e7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Slayden.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Slayden.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

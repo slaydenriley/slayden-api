@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slayden.Api", "Slayden.Api\Slayden.Api.csproj", "{45E59BA2-CC76-4A94-9549-0DE3BC566249}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slayden.Core", "Slayden.Core\Slayden.Core.csproj", "{39B2C5FB-9FB6-4C6A-99DA-74EDEF343EDD}"

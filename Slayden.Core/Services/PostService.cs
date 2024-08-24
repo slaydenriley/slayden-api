@@ -15,6 +15,11 @@ public class PostService(IPostRepository repository) : IPostService
 {
     public async Task<ErrorOr<Post>> GetPostById(Guid id)
     {
+        if (id == new Guid())
+        {
+            return Error.Validation(description: "Post ID must not be a zero guid");
+        }
+
         var post = await repository.GetPostById(id);
         if (post == null)
         {

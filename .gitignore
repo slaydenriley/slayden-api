@@ -3,3 +3,4 @@ appsettings.User.json
 .idea
 **/bin
 **/.git
+**/obj

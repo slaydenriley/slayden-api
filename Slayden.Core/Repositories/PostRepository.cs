@@ -15,7 +15,7 @@ public class PostRepository(IOptions<CosmosOptions> cosmosOptions) : IPostReposi
 {
     public async Task<Post?> GetPostById(Guid id)
     {
-        var client = new CosmosClient(connectionString: cosmosOptions.Value.ConnectionString);
+        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
 
         var container = client.GetDatabase("slayden-db").GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<Post>();

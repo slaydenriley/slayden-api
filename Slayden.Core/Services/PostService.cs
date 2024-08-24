@@ -26,18 +26,28 @@ public class PostService(IPostRepository repository) : IPostService
 
     public async Task<ErrorOr<Post>> CreatePost(string title, string body)
     {
+        List<Error> errors = [];
+        if (title.Length > 50)
+        {
+            errors.Add(Error.Validation(description: "Title must be less than 50 characters."));
+        }
+
+        if (body.Length > 500)
+        {
+            errors.Add(Error.Validation(description: "Body must be less than 500 characters."));
+        }
+
+        if (errors.Count > 0)
+        {
+            return errors;
+        }
+
         var postDto = await repository.CreatePost(title, body);
         if (postDto == null)
         {
             return Error.Failure(description: "Error creating a new post");
         }
 
-        var post = Post.From(postDto);
-        if (post == null)
-        {
-            return Error.Failure(description: "Error creating a new post");
-        }
-
-        return post;
+        return Post.From(postDto);
     }
 }

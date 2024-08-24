@@ -13,7 +13,7 @@ public class PostController(IPostService postService) : SlaydenControllerBase
         var result = await postService.GetPostById(id);
         if (result.IsError)
         {
-            return BadRequest(result.Errors);
+            return BadRequest(result.FirstError);
         }
 
         return Ok(result.Value);

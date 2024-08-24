@@ -1,18 +1,31 @@
-var builder = WebApplication.CreateBuilder(args);
+using Serilog;
+using Slayden.Core.Options;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    var builder = WebApplication.CreateBuilder(args);
 
-app.UseHttpsRedirection();
-app.Run();
+    builder.Services.Configure<CosmosOptions>(builder.Configuration.GetSection("Cosmos"));
+    
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHealthChecks("/health-check/");
+    app.MapControllers();
+    
+    app.Run();
+}
+catch (Exception e)
+{
+    Log.Logger.Fatal("Unexpected application termination");
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}

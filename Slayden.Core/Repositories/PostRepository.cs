@@ -2,7 +2,6 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Options;
 using Slayden.Core.Dtos;
-using Slayden.Core.Models;
 using Slayden.Core.Options;
 
 namespace Slayden.Core.Repositories;

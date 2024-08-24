@@ -20,13 +20,13 @@ public class PostService(IPostRepository repository) : IPostService
             return Error.Validation(description: "Post ID must not be a zero guid");
         }
 
-        var post = await repository.GetPostById(id);
-        if (post == null)
+        var postDto = await repository.GetPostById(id);
+        if (postDto == null)
         {
             return Error.NotFound("404", $"Post with id {id} not found");
         }
 
-        return post;
+        return Post.From(postDto);
     }
 
     public async Task<ErrorOr<Post>> CreatePost(string title, string body)

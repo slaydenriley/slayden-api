@@ -9,7 +9,7 @@ namespace Slayden.Core.Repositories;
 
 public interface IPostRepository
 {
-    Task<Post?> GetPostById(Guid id);
+    Task<PostDto?> GetPostById(Guid id);
 
     Task<PostDto?> CreatePost(string title, string body);
 }
@@ -19,16 +19,18 @@ public class PostRepository(
     IOptions<UserOptions> userOptions
 ) : IPostRepository
 {
-    public async Task<Post?> GetPostById(Guid id)
+    public async Task<PostDto?> GetPostById(Guid id)
     {
         var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
 
         var container = client.GetDatabase("slayden-db").GetContainer("posts");
-        var queryable = container.GetItemLinqQueryable<Post>();
+        var queryable = container.GetItemLinqQueryable<PostDto>();
 
-        using var feed = queryable.Where(p => p.Id == id).ToFeedIterator();
+        using var feed = queryable
+            .Where(post => post.id == id.ToString())
+            .ToFeedIterator();
 
-        List<Post> results = [];
+        List<PostDto> results = [];
         while (feed.HasMoreResults)
         {
             var response = await feed.ReadNextAsync();

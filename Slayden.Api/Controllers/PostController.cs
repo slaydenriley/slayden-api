@@ -7,11 +7,16 @@ namespace Slayden.Api.Controllers;
 [Route("posts")]
 public class PostController(IPostService postService) : SlaydenControllerBase
 {
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetPost([FromRoute] Guid id)
     {
         var result = await postService.GetPostById(id);
-        return BadRequest("Not implemented");
+        if (result.IsError)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpGet]

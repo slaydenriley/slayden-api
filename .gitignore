@@ -1,6 +1,7 @@
 .env
 appsettings.User.json
 .idea
-**/bin
-**/.git
-**/obj
+dotnet-tools.json
+*.DotSettings.*
+[Oo]bj
+[Bb]in

@@ -1,8 +1,8 @@
-using Slayden.Core.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using Slayden.Core.Options;
 using Microsoft.Extensions.Options;
+using Slayden.Core.Models;
+using Slayden.Core.Options;
 
 namespace Slayden.Core.Repositories;
 
@@ -15,17 +15,13 @@ public class PostRepository(IOptions<CosmosOptions> cosmosOptions) : IPostReposi
 {
     public async Task<Post?> GetPostById(Guid id)
     {
-        var client = new CosmosClient(
-            connectionString: cosmosOptions.Value.ConnectionString
-        );
-        
+        var client = new CosmosClient(connectionString: cosmosOptions.Value.ConnectionString);
+
         var container = client.GetDatabase("slayden-db").GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<Post>();
-        
-        using var feed = queryable
-            .Where(p => p.Id == id)
-            .ToFeedIterator();
-        
+
+        using var feed = queryable.Where(p => p.Id == id).ToFeedIterator();
+
         List<Post> results = [];
         while (feed.HasMoreResults)
         {

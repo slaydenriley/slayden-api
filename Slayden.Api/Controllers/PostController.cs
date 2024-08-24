@@ -29,7 +29,12 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     [HttpPost]
     public async Task<ActionResult> CreatePost(CreatePostRequest request)
     {
-        // var result = await postService.CreatePost(id)
-        return BadRequest("Not implemented");
+        var result = await postService.CreatePost(request.Title, request.Body);
+        if (result.IsError)
+        {
+            return BadRequest(result.FirstError);
+        }
+
+        return Ok(result.Value);
     }
 }

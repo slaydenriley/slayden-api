@@ -12,6 +12,7 @@ try
         .AddEnvironmentVariables();
 
     builder.Services.Configure<CosmosOptions>(builder.Configuration.GetSection("Cosmos"));
+    builder.Services.Configure<UserOptions>(builder.Configuration.GetSection("User"));
 
     builder.Services.AddSlaydenCore();
     builder.Services.AddHealthChecks();

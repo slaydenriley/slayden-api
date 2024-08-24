@@ -3,28 +3,27 @@ using Slayden.Api.Requests.Posts;
 
 namespace Slayden.Api.Controllers;
 
-[Controller]
 [Route("posts")]
-public class PostController
+public class PostController : SlaydenControllerBase
 {
-    [HttpGet]
-    public async Task GetPost(Guid id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetPost([FromRoute] Guid id)
     {
-        // var result = await postService.GetPostById(id)
-        throw new NotImplementedException();
+        // var result = await postService.GetPostById(id);
+        return BadRequest("Not implemented");
     }
 
     [HttpGet]
-    public async Task GetPosts()
+    public async Task<ActionResult> GetPosts()
     {
         // var result = await postService.GetAllPosts(id)
-        throw new NotImplementedException();
+        return BadRequest("Not implemented");
     }
 
     [HttpPost]
-    public async Task CreatePost(CreatePostRequest request)
+    public async Task<ActionResult> CreatePost(CreatePostRequest request)
     {
         // var result = await postService.CreatePost(id)
-        throw new NotImplementedException();
+        return BadRequest("Not implemented");
     }
 }

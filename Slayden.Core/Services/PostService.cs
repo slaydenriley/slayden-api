@@ -8,6 +8,8 @@ public interface IPostService
 {
     Task<ErrorOr<Post>> GetPostById(Guid id);
 
+    Task<ErrorOr<List<Post>>> GetAllPosts();
+
     Task<ErrorOr<Post>> CreatePost(string title, string body);
 }
 
@@ -29,9 +31,19 @@ public class PostService(IPostRepository repository) : IPostService
         return Post.From(postDto);
     }
 
+    public async Task<ErrorOr<List<Post>>> GetAllPosts()
+    {
+        var postDtoList = await repository.GetAllPosts();
+
+        var posts = new List<Post>();
+        posts.AddRange(postDtoList.Select(Post.From));
+
+        return posts;
+    }
+
     public async Task<ErrorOr<Post>> CreatePost(string title, string body)
     {
-        List<Error> errors = [];
+        var errors = new List<Error>();
         if (title.Length > 50)
         {
             errors.Add(Error.Validation(description: "Title must be less than 50 characters."));

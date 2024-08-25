@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Slayden.Api.Requests.Posts;
+using Slayden.Api.Responses;
+using Slayden.Core.Models;
 using Slayden.Core.Services;
 
 namespace Slayden.Api.Controllers;
@@ -28,8 +30,19 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     [HttpGet]
     public async Task<ActionResult> GetPosts()
     {
-        // var result = await postService.GetAllPosts(id)
-        return BadRequest("Not implemented");
+        var result = await postService.GetAllPosts();
+        if (result.IsError)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        var response = new PageResponse<Post>
+        {
+            TotalItems = result.Value.Count,
+            Items = result.Value
+        };
+
+        return Ok(response);
     }
 
     /// <summary>

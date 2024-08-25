@@ -10,6 +10,8 @@ public interface IPostRepository
 {
     Task<PostDto?> GetPostById(Guid id);
 
+    Task<List<PostDto>> GetAllPosts();
+
     Task<PostDto?> CreatePost(string title, string body);
 }
 
@@ -29,7 +31,7 @@ public class PostRepository(
             .Where(post => post.id == id.ToString())
             .ToFeedIterator();
 
-        List<PostDto> results = [];
+        var results = new List<PostDto>();
         while (feed.HasMoreResults)
         {
             var response = await feed.ReadNextAsync();
@@ -37,6 +39,25 @@ public class PostRepository(
         }
 
         return results.Count != 1 ? null : results.SingleOrDefault();
+    }
+
+    public async Task<List<PostDto>> GetAllPosts()
+    {
+        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
+
+        var container = client.GetDatabase("slayden-db").GetContainer("posts");
+        var queryable = container.GetItemLinqQueryable<PostDto>();
+
+        using var feed = queryable.ToFeedIterator();
+
+        var results = new List<PostDto>();
+        while (feed.HasMoreResults)
+        {
+            var response = await feed.ReadNextAsync();
+            results.AddRange(response);
+        }
+
+        return results;
     }
 
     public async Task<PostDto?> CreatePost(string title, string body)

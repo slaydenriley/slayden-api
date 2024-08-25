@@ -25,9 +25,7 @@ public class Post
             Body = postDto.body,
             CreatedAt = DateTime.Parse(postDto.createdAt),
             UpdatedAt = DateTime.Parse(postDto.updatedAt),
-            DeletedAt = DateTime.TryParse(postDto.deletedAt, out var deletedAt)
-                ? deletedAt
-                : null
+            DeletedAt = DateTime.TryParse(postDto.deletedAt, out var deletedAt) ? deletedAt : null,
         };
     }
 }

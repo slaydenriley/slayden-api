@@ -10,10 +10,10 @@ namespace Slayden.Api.Controllers;
 public class PostController(IPostService postService) : SlaydenControllerBase
 {
     /// <summary>
-    /// Retrieves a specific post by its unique id
+    /// Retrieve a specific post by its unique id
     /// </summary>
     /// <response code="200">Success</response>
-    /// <response code="400">Invalid or missing id for post</response>
+    /// <response code="400">Validation failure, view error response</response>
     /// <response code="404">Not Found</response>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetPost([FromRoute] Guid id)
@@ -28,10 +28,10 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     }
 
     /// <summary>
-    /// Retrieves all posts
+    /// Retrieve all posts
     /// </summary>
     /// <response code="200">Success</response>
-    /// <response code="400">Validation failure</response>
+    /// <response code="400">Validation failure, view error response</response>
     [HttpGet]
     public async Task<ActionResult> GetPosts()
     {
@@ -44,7 +44,7 @@ public class PostController(IPostService postService) : SlaydenControllerBase
         var response = new PageResponse<Post>
         {
             TotalItems = result.Value.Count,
-            Items = result.Value
+            Items = result.Value,
         };
 
         return Ok(response);
@@ -54,9 +54,9 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     /// Create a new post
     /// </summary>
     /// <response code="201">Post successfully created</response>
-    /// <response code="400">Invalid or missing fields for creating a new post</response>
+    /// <response code="400">Validation failure, view error response</response>
     [HttpPost]
-    public async Task<ActionResult> CreatePost(CreatePostRequest request)
+    public async Task<ActionResult> CreatePost([FromBody] CreatePostRequest request)
     {
         var result = await postService.CreatePost(request.Title, request.Body);
         if (result.IsError)
@@ -65,5 +65,32 @@ public class PostController(IPostService postService) : SlaydenControllerBase
         }
 
         return StatusCode(StatusCodes.Status201Created, result.Value);
+    }
+
+    /// <summary>
+    /// Update an existing post
+    /// </summary>
+    /// <response code="200">Post updated successfully</response>
+    /// <response code="400">Validation failure, view error response</response>
+    /// <response code="404">Not Found</response>
+    [HttpPatch("{id:guid}")]
+    public async Task<ActionResult> UpdatePost(
+        [FromRoute] Guid id,
+        [FromBody] UpdatePostRequest request
+    )
+    {
+        var existingPost = await postService.GetPostById(id);
+        if (existingPost.IsError)
+        {
+            return BadRequest(existingPost.Errors);
+        }
+
+        var updateResult = await postService.UpdatePost(id, request.Title, request.Body);
+        if (updateResult.IsError)
+        {
+            return BadRequest(updateResult.Errors);
+        }
+
+        return StatusCode(StatusCodes.Status201Created, updateResult.Value);
     }
 }

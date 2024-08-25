@@ -13,6 +13,8 @@ public interface IPostRepository
     Task<List<PostDto>> GetAllPosts();
 
     Task<PostDto?> CreatePost(string title, string body);
+
+    Task<PostDto?> UpdatePost(Guid id, string? title, string? body);
 }
 
 public class PostRepository(
@@ -27,9 +29,7 @@ public class PostRepository(
         var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
-        using var feed = queryable
-            .Where(post => post.id == id.ToString())
-            .ToFeedIterator();
+        using var feed = queryable.Where(post => post.id == id.ToString()).ToFeedIterator();
 
         var results = new List<PostDto>();
         while (feed.HasMoreResults)
@@ -80,5 +80,34 @@ public class PostRepository(
             },
             partitionKey: new PartitionKey(userId)
         );
+    }
+
+    public async Task<PostDto?> UpdatePost(Guid id, string? title, string? body)
+    {
+        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
+        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
+
+        var userId = userOptions.Value.Id.ToString();
+
+        var patchOperation = new List<PatchOperation>();
+        if (title != null)
+        {
+            patchOperation.Add(PatchOperation.Add("/title", title));
+        }
+
+        if (body != null)
+        {
+            patchOperation.Add(PatchOperation.Add("/body", body));
+        }
+
+        patchOperation.Add(PatchOperation.Add("/updatedAt", DateTime.UtcNow));
+
+        var response = await container.PatchItemAsync<PostDto>(
+            id: id.ToString(),
+            partitionKey: new PartitionKey(userId),
+            patchOperation
+        );
+
+        return response.Resource;
     }
 }

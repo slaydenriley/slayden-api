@@ -19,13 +19,13 @@ public class PostService(IPostRepository repository) : IPostService
     {
         if (id == new Guid())
         {
-            return Error.Validation(description: "Post ID must not be a zero guid");
+            return Error.Validation("Validation Error", "Post ID must not be a zero guid");
         }
 
         var postDto = await repository.GetPostById(id);
         if (postDto == null)
         {
-            return Error.NotFound("404", $"Post with id {id} not found");
+            return Error.NotFound("Not Found", $"Post with id {id} not found");
         }
 
         return Post.From(postDto);
@@ -46,12 +46,12 @@ public class PostService(IPostRepository repository) : IPostService
         var errors = new List<Error>();
         if (title.Length > 50)
         {
-            errors.Add(Error.Validation(description: "Title must be less than 50 characters."));
+            errors.Add(Error.Validation("Validation Error", "Title must be less than 50 characters."));
         }
 
         if (body.Length > 500)
         {
-            errors.Add(Error.Validation(description: "Body must be less than 500 characters."));
+            errors.Add(Error.Validation("Validation Error", "Body must be less than 500 characters."));
         }
 
         if (errors.Count > 0)
@@ -62,7 +62,7 @@ public class PostService(IPostRepository repository) : IPostService
         var postDto = await repository.CreatePost(title, body);
         if (postDto == null)
         {
-            return Error.Failure(description: "Error creating a new post");
+            return Error.Failure("Internal Error", "Error creating a new post");
         }
 
         return Post.From(postDto);

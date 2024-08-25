@@ -24,7 +24,7 @@ public class PostRepository(
     {
         var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
 
-        var container = client.GetDatabase("slayden-db").GetContainer("posts");
+        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
         using var feed = queryable
@@ -45,7 +45,7 @@ public class PostRepository(
     {
         var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
 
-        var container = client.GetDatabase("slayden-db").GetContainer("posts");
+        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
         using var feed = queryable.ToFeedIterator();
@@ -63,7 +63,7 @@ public class PostRepository(
     public async Task<PostDto?> CreatePost(string title, string body)
     {
         var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
-        var container = client.GetDatabase("slayden-db").GetContainer("posts");
+        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
 
         var now = DateTime.UtcNow.ToString("O");
         var userId = userOptions.Value.Id.ToString();

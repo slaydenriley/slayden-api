@@ -31,7 +31,10 @@ public class PostRepository(
         var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
-        using var feed = queryable.Where(post => post.id == id.ToString()).ToFeedIterator();
+        using var feed = queryable
+            .Where(post => post.id == id.ToString())
+            .Where(post => !string.IsNullOrEmpty(post.deletedAt))
+            .ToFeedIterator();
 
         var results = new List<PostDto>();
         while (feed.HasMoreResults)
@@ -50,7 +53,9 @@ public class PostRepository(
         var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
-        using var feed = queryable.ToFeedIterator();
+        using var feed = queryable
+            .Where(post => !string.IsNullOrEmpty(post.deletedAt))
+            .ToFeedIterator();
 
         var results = new List<PostDto>();
         while (feed.HasMoreResults)

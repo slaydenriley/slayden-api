@@ -62,8 +62,6 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     /// </summary>
     /// <response code="201">Post created successfully</response>
     /// <response code="400">Validation failure, view error response</response>
-    /// <param name="title">Title of blog post</param>
-    /// <param name="body">Body of blog post, preferably formatted as markdown</param>
     /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -84,8 +82,6 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     /// <response code="200">Post updated successfully</response>
     /// <response code="400">Validation failure, view error response</response>
     /// <response code="404">Not Found</response>
-    /// <param name="title">Title of blog post</param>
-    /// <param name="body">Body of blog post, preferably formatted as markdown</param>
     /// <returns></returns>
     [HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

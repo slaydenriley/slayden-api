@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Slayden.Core;
 using Slayden.Core.Options;
@@ -42,7 +43,7 @@ try
 }
 catch (Exception e)
 {
-    Log.Logger.Fatal("Unexpected application termination");
+    Log.Logger.Fatal("Unexpected application termination: {exception}", e);
     throw;
 }
 finally

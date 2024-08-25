@@ -12,9 +12,9 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     /// <summary>
     /// Retrieves a specific post by its unique id
     /// </summary>
-    /// <response code="200">Post found</response>
+    /// <response code="200">Success</response>
     /// <response code="400">Invalid or missing id for post</response>
-    /// <response code="404">Post not found</response>
+    /// <response code="404">Not Found</response>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetPost([FromRoute] Guid id)
     {
@@ -27,6 +27,11 @@ public class PostController(IPostService postService) : SlaydenControllerBase
         return Ok(result.Value);
     }
 
+    /// <summary>
+    /// Retrieves all posts
+    /// </summary>
+    /// <response code="200">Success</response>
+    /// <response code="400">Validation failure</response>
     [HttpGet]
     public async Task<ActionResult> GetPosts()
     {

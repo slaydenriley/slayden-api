@@ -53,7 +53,7 @@ public class PostController(IPostService postService) : SlaydenControllerBase
     /// <summary>
     /// Create a new post
     /// </summary>
-    /// <response code="201">Post successfully created</response>
+    /// <response code="201">Post created successfully</response>
     /// <response code="400">Validation failure, view error response</response>
     [HttpPost]
     public async Task<ActionResult> CreatePost([FromBody] CreatePostRequest request)

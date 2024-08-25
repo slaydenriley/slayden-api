@@ -15,6 +15,8 @@ public interface IPostRepository
     Task<PostDto?> CreatePost(string title, string body);
 
     Task<PostDto?> UpdatePost(Guid id, string? title, string? body);
+
+    Task<PostDto?> DeletePost(Guid id);
 }
 
 public class PostRepository(
@@ -106,6 +108,25 @@ public class PostRepository(
             id: id.ToString(),
             partitionKey: new PartitionKey(userId),
             patchOperation
+        );
+
+        return response.Resource;
+    }
+
+    public async Task<PostDto?> DeletePost(Guid id)
+    {
+        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
+        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
+
+        var userId = userOptions.Value.Id.ToString();
+
+        var response = await container.PatchItemAsync<PostDto>(
+            id: id.ToString(),
+            partitionKey: new PartitionKey(userId),
+            new PatchOperation[]
+            {
+                PatchOperation.Add("/deletedAt", DateTime.UtcNow)
+            }
         );
 
         return response.Resource;

@@ -13,6 +13,8 @@ public interface IPostService
     Task<ErrorOr<Post>> CreatePost(string title, string body);
 
     Task<ErrorOr<Post>> UpdatePost(Guid id, string? title, string? body);
+
+    Task<ErrorOr<Post?>> DeletePost(Guid id);
 }
 
 public class PostService(IPostRepository repository) : IPostService
@@ -119,6 +121,22 @@ public class PostService(IPostRepository repository) : IPostService
         if (postDto == null)
         {
             return Error.Failure("Internal Error", "Error updating existing post");
+        }
+
+        return Post.From(postDto);
+    }
+
+    public async Task<ErrorOr<Post?>> DeletePost(Guid id)
+    {
+        if (id == new Guid())
+        {
+            return Error.Validation("Validation Error", "Post ID must not be a zero guid");
+        }
+
+        var postDto = await repository.DeletePost(id);
+        if (postDto == null)
+        {
+            return Error.Failure("Internal Error", "Error deleting existing post");
         }
 
         return Post.From(postDto);

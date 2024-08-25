@@ -93,4 +93,28 @@ public class PostController(IPostService postService) : SlaydenControllerBase
 
         return StatusCode(StatusCodes.Status201Created, updateResult.Value);
     }
+
+    /// <summary>
+    /// Delete an existing post
+    /// </summary>
+    /// <response code="204">Post deleted successfully</response>
+    /// <response code="400">Validation failure, view error response</response>
+    /// <response code="404">Not Found</response>
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> DeletePost([FromRoute] Guid id)
+    {
+        var existingPost = await postService.GetPostById(id);
+        if (existingPost.IsError)
+        {
+            return BadRequest(existingPost.Errors);
+        }
+
+        var deleteResult = await postService.DeletePost(id);
+        if (deleteResult.IsError)
+        {
+            return BadRequest(deleteResult.Errors);
+        }
+
+        return StatusCode(StatusCodes.Status204NoContent);
+    }
 }

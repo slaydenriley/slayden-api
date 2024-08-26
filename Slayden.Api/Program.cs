@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Slayden.Core;
+using Slayden.Core.Auth;
 using Slayden.Core.Options;
 
 try
@@ -17,6 +17,7 @@ try
 
     builder.Services.AddSlaydenCore();
     builder.Services.AddHealthChecks();
+    builder.Services.AddBasicAuth(builder.Configuration);
     builder.Services.AddControllers();
 
     if (builder.Environment.IsDevelopment())
@@ -37,6 +38,7 @@ try
     }
 
     app.UseHealthChecks("/health-check/");
+    app.UseBasicAuthentication();
     app.MapControllers();
 
     app.Run();

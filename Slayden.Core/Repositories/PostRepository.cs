@@ -1,6 +1,7 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Options;
+using Slayden.Core.Data;
 using Slayden.Core.Dtos;
 using Slayden.Core.Options;
 
@@ -20,16 +21,15 @@ public interface IPostRepository
 }
 
 public class PostRepository(
-    IOptions<CosmosOptions> cosmosOptions,
+    ICosmosContainerProvider containerProvider,
     IOptions<UserOptions> userOptions
 ) : IPostRepository
 {
+    private readonly Container _container = containerProvider.Posts;
+
     public async Task<PostDto?> GetPostById(Guid id)
     {
-        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
-
-        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
-        var queryable = container.GetItemLinqQueryable<PostDto>();
+        var queryable = _container.GetItemLinqQueryable<PostDto>();
 
         using var feed = queryable
             .Where(post => post.id == id.ToString())
@@ -48,14 +48,9 @@ public class PostRepository(
 
     public async Task<List<PostDto>> GetAllPosts()
     {
-        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
+        var queryable = _container.GetItemLinqQueryable<PostDto>();
 
-        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
-        var queryable = container.GetItemLinqQueryable<PostDto>();
-
-        using var feed = queryable
-            .Where(post => post.deletedAt == null)
-            .ToFeedIterator();
+        using var feed = queryable.Where(post => post.deletedAt == null).ToFeedIterator();
 
         var results = new List<PostDto>();
         while (feed.HasMoreResults)
@@ -69,13 +64,10 @@ public class PostRepository(
 
     public async Task<PostDto?> CreatePost(string title, string body)
     {
-        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
-        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
-
         var now = DateTime.UtcNow.ToString("O");
         var userId = userOptions.Value.Id.ToString();
 
-        return await container.CreateItemAsync<PostDto?>(
+        return await _container.CreateItemAsync<PostDto?>(
             item: new PostDto
             {
                 id = Guid.NewGuid().ToString(),
@@ -91,9 +83,6 @@ public class PostRepository(
 
     public async Task<PostDto?> UpdatePost(Guid id, string? title, string? body)
     {
-        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
-        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
-
         var userId = userOptions.Value.Id.ToString();
 
         var patchOperation = new List<PatchOperation>();
@@ -109,7 +98,7 @@ public class PostRepository(
 
         patchOperation.Add(PatchOperation.Add("/updatedAt", DateTime.UtcNow));
 
-        var response = await container.PatchItemAsync<PostDto>(
+        var response = await _container.PatchItemAsync<PostDto>(
             id: id.ToString(),
             partitionKey: new PartitionKey(userId),
             patchOperation
@@ -120,12 +109,9 @@ public class PostRepository(
 
     public async Task<PostDto?> DeletePost(Guid id)
     {
-        var client = new CosmosClient(cosmosOptions.Value.ConnectionString);
-        var container = client.GetDatabase(cosmosOptions.Value.Database).GetContainer("posts");
-
         var userId = userOptions.Value.Id.ToString();
 
-        var response = await container.PatchItemAsync<PostDto>(
+        var response = await _container.PatchItemAsync<PostDto>(
             id: id.ToString(),
             partitionKey: new PartitionKey(userId),
             new PatchOperation[] { PatchOperation.Add("/deletedAt", DateTime.UtcNow) }

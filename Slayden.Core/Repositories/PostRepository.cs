@@ -33,7 +33,7 @@ public class PostRepository(
 
         using var feed = queryable
             .Where(post => post.id == id.ToString())
-            .Where(post => !string.IsNullOrEmpty(post.deletedAt))
+            .Where(post => post.deletedAt == null)
             .ToFeedIterator();
 
         var results = new List<PostDto>();
@@ -54,7 +54,7 @@ public class PostRepository(
         var queryable = container.GetItemLinqQueryable<PostDto>();
 
         using var feed = queryable
-            .Where(post => !string.IsNullOrEmpty(post.deletedAt))
+            .Where(post => post.deletedAt == null)
             .ToFeedIterator();
 
         var results = new List<PostDto>();
@@ -128,10 +128,7 @@ public class PostRepository(
         var response = await container.PatchItemAsync<PostDto>(
             id: id.ToString(),
             partitionKey: new PartitionKey(userId),
-            new PatchOperation[]
-            {
-                PatchOperation.Add("/deletedAt", DateTime.UtcNow)
-            }
+            new PatchOperation[] { PatchOperation.Add("/deletedAt", DateTime.UtcNow) }
         );
 
         return response.Resource;

@@ -102,7 +102,7 @@ public class PostController(IPostService postService) : SlaydenControllerBase
             return BadRequest(updateResult.Errors);
         }
 
-        return StatusCode(StatusCodes.Status201Created, updateResult.Value);
+        return Ok(updateResult.Value);
     }
 
     /// <summary>
